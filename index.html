@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Plantation | Dashboard</title>
+<style>
+:root{--bg:#0b1220;--panel:#151f32;--panel2:#1b2940;--line:#2a3851;--text:#edf4ff;--muted:#9fb0c9;--green:#18c964;--blue:#2684ff;--orange:#ff9d18;--purple:#8057f5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 "Segoe UI",Arial,sans-serif}
+.app{display:flex;min-height:100vh}.sidebar{width:245px;background:#101a2b;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;flex-shrink:0}
+.brand{padding:8px 10px 24px;border-bottom:1px solid var(--line);margin-bottom:16px}.brand strong{display:block;font-size:21px;line-height:1.1;color:#fff}.brand strong span{color:#4be27f}.brand small{color:var(--muted);letter-spacing:1px}
+.nav{display:grid;gap:7px}.nav button{background:transparent;border:0;color:#c9d6e8;text-align:left;padding:12px 13px;border-radius:9px;font-size:14px;cursor:pointer}.nav button.active,.nav button:hover{background:#1265dc;color:#fff}.sidebar-foot{margin-top:auto;color:var(--muted);font-size:12px;padding:16px 8px}
+main{flex:1;min-width:0}.topbar{height:68px;background:#111c2f;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0;z-index:2}.topbar h2{margin:0;font-size:21px}.user{color:var(--muted)}.content{padding:22px;max-width:1600px;margin:auto}
+.hero{min-height:145px;border-radius:15px;padding:25px 30px;background:linear-gradient(90deg,rgba(5,20,15,.88),rgba(8,30,24,.42)),linear-gradient(135deg,#17653a,#153a2c 55%,#8ab84d);border:1px solid #276c4a;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.hero h1{font-size:clamp(25px,3vw,39px);margin:0;letter-spacing:1px}.hero p{font-size:16px;margin:4px 0 0;color:#d5f5df}.hero .palm{font-size:65px;opacity:.9}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.metric{padding:18px;border-radius:13px;min-height:110px;box-shadow:0 6px 20px #0002}.metric small{opacity:.9}.metric b{display:block;font-size:27px;margin:3px 0}.metric.green{background:linear-gradient(135deg,#0eb94e,#087b3d)}.metric.blue{background:linear-gradient(135deg,#1478f5,#0753bd)}.metric.orange{background:linear-gradient(135deg,#ffa31a,#d97706)}.metric.purple{background:linear-gradient(135deg,#8057f5,#512ac5)}
+.grid-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}.grid-three{display:grid;grid-template-columns:1.1fr .85fr 1.2fr;gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;min-width:0}.panel h3{margin:0 0 15px;font-size:17px}.panel h3 span{color:#42d77a;margin-right:7px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600}tr:last-child td{border-bottom:0}
+.chart{height:205px;display:flex;align-items:end;gap:12px;padding:10px 5px 0;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to bottom,transparent 0,transparent 49px,#29364b 50px)}.bar-wrap{flex:1;height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:6px}.bar{width:min(28px,70%);border-radius:6px 6px 0 0;background:linear-gradient(#40e57b,#138c4a);min-height:4px}.bar.target{background:linear-gradient(#59a5ff,#1765c7)}.bar-wrap label{font-size:11px;color:var(--muted)}
+.legend{display:flex;gap:14px;color:var(--muted);font-size:12px;margin:-5px 0 8px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:var(--green)}.dot.blue{background:var(--blue)}
+.pill{padding:3px 8px;border-radius:20px;background:#174d36;color:#6df0a0;font-size:11px}.pill.warn{background:#594117;color:#ffd27a}.pill.bad{background:#5c252c;color:#ff9ba3}
+.donut-wrap{display:flex;align-items:center;gap:17px;justify-content:center;padding:10px}.donut{width:135px;height:135px;border-radius:50%;background:conic-gradient(var(--green) 0 63.5%,#fb4545 63.5% 100%);display:grid;place-items:center}.donut:after{content:"63.5%\\A Realisasi";white-space:pre;text-align:center;background:var(--panel);width:94px;height:94px;border-radius:50%;display:grid;place-content:center;font-weight:700;font-size:17px}.donut-wrap p{color:var(--muted);margin:8px 0}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:13px}.toolbar input,.toolbar select,.form-control{background:#0f192a;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px 11px;outline:none}.btn{border:0;border-radius:8px;padding:10px 14px;background:#1265dc;color:#fff;cursor:pointer;font-weight:600}.btn.green{background:#11994b}.btn.ghost{background:#26364f}.btn.danger{background:#b83242}
+.page{display:none}.page.active{display:block}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field label{display:block;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%}.empty{color:var(--muted);padding:20px;text-align:center}
+footer{color:#7587a2;text-align:center;padding:20px;font-size:12px}
+@media(max-width:1050px){.sidebar{width:205px}.cards{grid-template-columns:repeat(2,1fr)}.grid-three{grid-template-columns:1fr 1fr}.grid-three .panel:last-child{grid-column:1/-1}}
+@media(max-width:720px){.app{display:block}.sidebar{width:100%;padding:12px}.brand{padding:4px 8px 12px;margin-bottom:8px}.nav{grid-template-columns:repeat(3,1fr)}.nav button{padding:9px;font-size:12px}.sidebar-foot{display:none}.topbar{height:55px;padding:0 14px}.content{padding:13px}.hero{padding:18px;min-height:120px}.hero .palm{font-size:40px}.cards{gap:9px}.metric{padding:13px;min-height:95px}.metric b{font-size:21px}.grid-two,.grid-three{grid-template-columns:1fr}.grid-three .panel:last-child{grid-column:auto}.panel{padding:13px}.form-grid{grid-template-columns:1fr}th,td{padding:8px 5px;font-size:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><strong>🌴 DIGITAL <span>PLANTATION</span></strong><small>PT KAHAYAN AGRO PLANTATION</small></div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard">⌂ &nbsp; Dashboard</button>
+    <button data-page="master">▦ &nbsp; Master Data</button>
+    <button data-page="input">＋ &nbsp; Input Pekerjaan</button>
+    <button data-page="laporan">▤ &nbsp; Laporan</button>
+    <button data-page="setting">⚙ &nbsp; Pengaturan</button>
+  </nav>
+  <div class="sidebar-foot">Digital Plantation System<br>Versi Demo 1.0.0</div>
+</aside>
+<main>
+<header class="topbar"><h2 id="pageTitle">Dashboard</h2><div class="user">🔔 &nbsp; Wilibertus Jarut · Mandor Upkeep</div></header>
+<div class="content">
+<section class="page active" id="dashboard">
+  <div class="hero"><div><h1>DIGITAL PLANTATION</h1><p>Smart Management, Better Productivity</p></div><div class="palm">🌴</div></div>
+  <div class="cards">
+    <div class="metric green"><small>Total Pokok</small><b id="totalPokok">125.780</b><small>Data master tanaman</small></div>
+    <div class="metric blue"><small>Luas Area</small><b id="totalHa">850 Ha</b><small>Area terdaftar</small></div>
+    <div class="metric orange"><small>Total HK Hari Ini</small><b id="totalHk">15 HK</b><small>Tenaga kerja tercatat</small></div>
+    <div class="metric purple"><small>Realisasi</small><b id="realisasi">63.5%</b><small>Contoh progres target</small></div>
+  </div>
+  <div class="grid-two">
+    <div class="panel"><h3><span>▥</span> Grafik Realisasi Kerja</h3><div class="legend"><span><i class="dot blue"></i>Target</span><span><i class="dot"></i>Realisasi</span></div><div class="chart" id="chart"></div></div>
+    <div class="panel"><h3><span>▤</span> Aktual Pekerjaan Hari Ini</h3><div class="toolbar"><input id="todayDate" type="date"></div><div style="overflow:auto"><table><thead><tr><th>Item</th><th>Blok</th><th>HK</th><th>Ha</th></tr></thead><tbody id="todayRows"></tbody></table></div></div>
+  </div>
+  <div class="grid-three">
+    <div class="panel"><h3>🏆 Top Prestasi Tim</h3><table><thead><tr><th>Tim</th><th>Realisasi</th><th>Status</th></tr></thead><tbody><tr><td>Tim Upkeep A</td><td>85.2%</td><td><span class="pill">Sangat Baik</span></td></tr><tr><td>Tim Upkeep B</td><td>78.7%</td><td><span class="pill">Baik</span></td></tr><tr><td>Tim Upkeep C</td><td>63.5%</td><td><span class="pill warn">Cukup</span></td></tr></tbody></table></div>
+    <div class="panel"><h3>◉ Status Area</h3><div class="donut-wrap"><div class="donut"></div><div><p>🟢 Sudah dikerjakan<br><b>539 Ha</b></p><p>🔴 Sisa target<br><b>311 Ha</b></p></div></div></div>
+    <div class="panel"><h3>🔔 Informasi & Notifikasi</h3><p>🟢 Laporan HK tim upkeep diperbarui</p><p>🔵 Data pekerjaan tersimpan</p><p>🟡 Periksa target realisasi harian</p></div>
+  </div>
+</section>
+<section class="page" id="master">
+  <div class="panel"><h3>Master Data Pekerjaan</h3><p style="color:var(--muted)">Contoh data referensi. Silakan sesuaikan dengan data aktual kebun.</p><table><thead><tr><th>Kode</th><th>Item Pekerjaan</th><th>Satuan</th></tr></thead><tbody><tr><td>UPK-01</td><td>Pruning</td><td>HK / Ha</td></tr><tr><td>UPK-02</td><td>Susun Pelepah</td><td>HK / Ha</td></tr><tr><td>UPK-03</td><td>Kastrasi</td><td>HK / Ha</td></tr><tr><td>UPK-04</td><td>Weeding</td><td>HK / Ha</td></tr><tr><td>UPK-05</td><td>Sanitasi</td><td>HK / Ha</td></tr></tbody></table></div>
+</section>
+<section class="page" id="input">
+  <div class="panel"><h3>Input Realisasi Pekerjaan</h3><p style="color:var(--muted)">Masukkan data aktual. Data tersimpan di browser perangkat ini.</p>
+  <form id="workForm"><div class="form-grid">
+    <div class="field"><label>Tanggal</label><input class="form-control" type="date" id="fDate" required></div>
+    <div class="field"><label>Item Pekerjaan</label><select class="form-control" id="fItem"><option>Pruning</option><option>Susun Pelepah</option><option>Kastrasi</option><option>Weeding</option><option>Sanitasi</option><option>Langsir Manual</option></select></div>
+    <div class="field"><label>Blok Kerja</label><input class="form-control" id="fBlock" placeholder="Contoh: L34-OP20" required></div>
+    <div class="field"><label>HK</label><input class="form-control" id="fHk" type="number" min="0" step="0.5" placeholder="Jumlah HK" required></div>
+    <div class="field"><label>Luas Kerja (Ha)</label><input class="form-control" id="fHa" type="number" min="0" step="0.01" placeholder="Contoh: 1.13" required></div>
+    <div class="field"><label>Keterangan</label><input class="form-control" id="fNote" placeholder="Opsional"></div>
+  </div><p><button class="btn green" type="submit">Simpan Data</button> <button class="btn ghost" type="reset">Reset Form</button></p></form></div>
+</section>
+<section class="page" id="laporan">
+  <div class="panel"><h3>Laporan Realisasi Pekerjaan</h3><div class="toolbar"><input id="searchReport" placeholder="Cari item atau blok..."><button class="btn" id="exportCsv">Export CSV</button></div><div style="overflow:auto"><table><thead><tr><th>Tanggal</th><th>Item</th><th>Blok</th><th>HK</th><th>Ha</th><th>Keterangan</th></tr></thead><tbody id="reportRows"></tbody></table></div></div>
+</section>
+<section class="page" id="setting">
+  <div class="panel"><h3>Pengaturan Sistem</h3><div class="form-grid"><div class="field"><label>Nama Perusahaan</label><input class="form-control" value="PT Kahayan Agro Plantation"></div><div class="field"><label>Nama Pengguna</label><input class="form-control" value="Wilibertus Jarut"></div><div class="field"><label>Jabatan</label><input class="form-control" value="Mandor Upkeep"></div><div class="field"><label>Nama Divisi</label><input class="form-control" value="Divisi 3"></div></div><p style="color:var(--muted)">Versi ini merupakan prototipe lokal. Untuk penggunaan multi-user dan sinkronisasi real-time, perlu dihubungkan ke backend dan database online.</p></div>
+</section>
+</div>
+<footer>© 2026 PT Kahayan Agro Plantation · Digital Plantation System</footer>
+</main>
+</div>
+<script>
+const KEY='digitalPlantationWork_v1';
+let records=JSON.parse(localStorage.getItem(KEY)||'[]');
+const demo=[
+ {date:new Date().toISOString().slice(0,10),item:'Pruning',block:'O33-OP15',hk:5,ha:1.13,note:'Data contoh'},
+ {date:new Date().toISOString().slice(0,10),item:'Susun Pelepah',block:'O33-OP15',hk:4,ha:1.10,note:'Data contoh'},
+ {date:new Date().toISOString().slice(0,10),item:'Kastrasi',block:'M32-OP24',hk:3,ha:1.05,note:'Data contoh'},
+ {date:new Date().toISOString().slice(0,10),item:'Weeding',block:'L34-OP20',hk:2,ha:.80,note:'Data contoh'},
+ {date:new Date().toISOString().slice(0,10),item:'Sanitasi',block:'L34-OP20',hk:1,ha:.60,note:'Data contoh'}
+];
+if(!records.length) records=demo;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(records));render()}
+function fmt(n){return Number(n).toLocaleString('id-ID',{maximumFractionDigits:2})}
+function render(){
+ const today=new Date().toISOString().slice(0,10), todays=records.filter(r=>r.date===today);
+ $('totalHk').textContent=fmt(todays.reduce((s,r)=>s+Number(r.hk),0))+' HK';
+ $('todayDate').value=today;
+ $('todayRows').innerHTML=todays.length?todays.map(r=>`<tr><td>${r.item}</td><td>${r.block}</td><td>${fmt(r.hk)} HK</td><td>${fmt(r.ha)} Ha</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Belum ada data hari ini</td></tr>';
+ const q=($('searchReport')?.value||'').toLowerCase();
+ const filtered=records.filter(r=>(r.item+' '+r.block+' '+r.date).toLowerCase().includes(q));
+ $('reportRows').innerHTML=filtered.length?filtered.map(r=>`<tr><td>${r.date}</td><td>${r.item}</td><td>${r.block}</td><td>${fmt(r.hk)}</td><td>${fmt(r.ha)}</td><td>${r.note||'-'}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Data tidak ditemukan</td></tr>';
+}
+function drawChart(){let months=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'], vals=[40,48,62,75,76,68,58,63,56,64,63,72];$('chart').innerHTML=months.map((m,i)=>`<div class="bar-wrap"><div class="bar target" style="height:${[55,65,78,90,90,90,90,90,90,90,90,90][i]}%"></div><div class="bar" style="height:${vals[i]}%"></div><label>${m}</label></div>`).join('')}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(b.dataset.page).classList.add('active');$('pageTitle').textContent=b.textContent.trim().replace(/^[⌂▦＋▤⚙]\s*/,'');if(b.dataset.page==='laporan')render()}));
+$('workForm').addEventListener('submit',e=>{e.preventDefault();records.unshift({date:$('fDate').value,item:$('fItem').value,block:$('fBlock').value.trim(),hk:Number($('fHk').value),ha:Number($('fHa').value),note:$('fNote').value.trim()});save();e.target.reset();$('fDate').value=new Date().toISOString().slice(0,10);alert('Data pekerjaan berhasil disimpan di perangkat ini.')});
+$('searchReport').addEventListener('input',render);
+$('exportCsv').addEventListener('click',()=>{let rows=[['Tanggal','Item','Blok','HK','Ha','Keterangan'],...records.map(r=>[r.date,r.item,r.block,r.hk,r.ha,r.note||''])];let csv=rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));a.download='laporan-digital-plantation.csv';a.click();URL.revokeObjectURL(a.href)});
+$('todayDate').addEventListener('change',()=>{let d=$('todayDate').value;let list=records.filter(r=>r.date===d);$('todayRows').innerHTML=list.length?list.map(r=>`<tr><td>${r.item}</td><td>${r.block}</td><td>${fmt(r.hk)} HK</td><td>${fmt(r.ha)} Ha</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Belum ada data pada tanggal ini</td></tr>'});
+$('fDate').value=new Date().toISOString().slice(0,10);drawChart();render();
+</script>
+</body>
+</html>
